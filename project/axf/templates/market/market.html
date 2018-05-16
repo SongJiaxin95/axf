@@ -1,0 +1,116 @@
+{% extends 'base_main.html' %}
+{% load static %}
+{% block extCSS %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'app/market/market.css' %}">
+{% endblock %}
+
+{% block EXTJS %}
+    <script type="text/javascript" src="{% static 'app/market/js/market.js' %}"></script>
+    <script type="text/javascript" src="{% static 'app/common/common.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <div id="market">
+
+        <aside>
+
+            <ul>
+                {% for foodtype in foodtypes %}
+                <!--闪购分类展示-->
+                    <li id="typeid_{{ foodtype.typeid }}">
+                        <!--链接地址，点击获取分类下的商品信息-->
+                        <a href="#" onclick="MarketType({{ foodtype.typeid }})">{{ foodtype.typename }}</a>
+                        {% ifequal forloop.counter 1 %}
+                            <span class="yellowSlide"></span>
+                        {% endifequal %}
+                    </li>
+                <!--处理数据结束-->
+                {% endfor %}
+            </ul>
+        </aside>
+        <section>
+            <nav>
+                <ul>
+                    <li id="all_types">
+                        <span>
+                        全部类型<span id="all_type_logo" class="glyphicon glyphicon-chevron-down"></span>
+                        </span></li>
+                    <li id="sort_rule"><span>综合排序<span id="sort_rule_logo" class="glyphicon glyphicon-chevron-down"></span></span></li>
+                </ul>
+            </nav>
+
+            <menu>
+            {% csrf_token %}
+                <ul id="show_goods">
+                    {% for good in goods %}
+                    <!--商品信息展示-->
+                        <li>
+                            <a href="#">
+                                <img src="{{ good.productimg }}">
+                                <div class="shoppingInfo">
+                                    <h6>{{ good.productlongname }}</h6>
+                                    <p class="detailTag">
+                                        <span>精选</span>
+                                        <span>热销中</span>
+                                    </p>
+                                    <p class="unit">
+
+                                    </p>
+                                    <p class="price">
+                                        <span>¥{{ good.price }}</span>
+                                        <s>¥{{ good.marketprice }}</s>
+                                    </p>
+                                </div>
+                            </a>
+                        <section>
+                            <button onclick="subShop({{ good.id }})">-</button>
+                            <span id="num_{{ good.id }}">0</span>
+                            <button onclick="addShop({{ good.id }})" >+</button>
+                        </section>
+                        </li>
+                    <!--处理数据结束-->
+                    {% endfor %}
+                </ul>
+
+                <div id="all_types_container">
+                    <div>
+                        <!--加载全部分类的数据-->
+                            <a onclick="Market_ChildType_Order(104749,{{ childtypenames.1 }},1)">
+                                <span id="childtype_{{ childtypenames.1 }}">{{ childtypenames.0 }}</span>
+                            </a>
+                        <!--处理数据结束-->
+                    </div>
+                </div>
+
+
+                <div id="sort_container">
+                    <div>
+{#      排序传递的也是状态码   0 , 1 ,2  , 3 ,4 ,5...                    #}
+                        <a onclick="Market_ChildType_Order(104749,0,1)">
+                            <span id="order_1">综合排序</span>
+                        </a>
+                        <a onclick="Market_ChildType_Order(104749,0,2)">
+                            <span id="order_2">销量排序</span>
+                        </a>
+                        <a onclick="Market_ChildType_Order(104749,0,3)">
+                            <span id="order_3">价格降序</span>
+                        </a>
+                        <a onclick="Market_ChildType_Order(104749,0,4)">
+                            <span id="order_4">价格升序</span>
+                        </a>
+
+                    </div>
+                </div>
+
+            </menu>
+
+        </section>
+
+
+    </div>
+
+
+{% endblock %}

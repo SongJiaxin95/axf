@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <h3>待付款订单列表</h3>
+
+    <ul>
+        <!--订单信息展示-->
+        {% for order in orders %}
+            <div style="height: 2px; width: 100%; border: 1px solid blue;clear: both;"></div>
+            <p style="font-size: 32px; text-align: center;color: orangered">订单id:{{ order.id }}</p>
+            <div style="height: 2px; width: 100%; border: 1px solid blue;"></div>
+            <li style="margin-bottom: 60px;">
+                {% for ordergoods in order.ordergoodsmodel_set.all %}
+                <div style="margin-top: 10px">
+                    <p style="font-size: 24px;float: left;width: 400px;height: 200px">商品数量:{{ ordergoods.good_num }}<br/><br/>商品名称:{{ ordergoods.goods.productlongname }}</p>
+                    <!--展示商品的名称-->
+                    <img src="{{ ordergoods.goods.productimg }}" alt="">
+                </div>
+                <div style="height: 4px; width: 100%; border: 1px solid black;clear: both"></div>
+                <!--处理结束-->
+                {% endfor %}
+                <a href="{% url 'axf:user_pay_order' order.id %}" style="height: 40px;width: 110px;background: red;color: white;float: right;font-size: 24px;text-align: center;">立即付款</a>
+            </li>
+        {% endfor %}
+        <!--订单处理结束-->
+
+
+    </ul>
+
+
+{% endblock %}
